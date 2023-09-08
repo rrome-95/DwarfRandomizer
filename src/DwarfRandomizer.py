@@ -42,6 +42,7 @@ def generateskilllist():
             points -= proficiencyrand
         dwarvesgenerated += 1
         printskills(dwarvesgenerated, skills, proficiencies)
+    input('\nPress ENTER to exit')
 
 
 def printskills(numberOfDwarf, skills, proficiencies):
