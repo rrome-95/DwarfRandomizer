@@ -1,7 +1,7 @@
 import random
 from enum import Enum
 
-def generateskilllist():
+def generateDwarves():
     dwarvesrequested = int(input("How many dwarves do you want to generate?: "))
     dwarvesgenerated = 0
     while(dwarvesgenerated < dwarvesrequested):
@@ -9,61 +9,69 @@ def generateskilllist():
         skills = []
         proficiencies = []
         while points > 0:
-            # Determine proficiency level and add it to the array.
-            if(points >=5):
-                proficiencyrand = random.randrange(1, 5, 1)
-                proficiencies.append(Proficiency(proficiencyrand))
-
-            elif(points == 1):
-                proficiencyrand = 1
-                proficiencies.append(Proficiency(1))
-            else:
-                proficiencyrand = random.randrange(1, points, 1)
-                proficiencies.append(Proficiency(proficiencyrand))
-
-            # Figure out which category we will select from.
-            categoryrand = random.random()
-
-            newskillfound = False
-            while(newskillfound == False):
-                if categoryrand <= 0.25:
-                    skillfound = selectcrucialskill()
-                elif categoryrand <=.50:
-                    skillfound = selectlaborskill()
-                elif categoryrand <=.75:
-                    skillfound = selectcombatskill()
-                else:
-                    skillfound = selectotherskill()
-
-                if not(skillfound in skills):
-                    newskillfound = True
-                    skills.append(skillfound)
-
-            points -= proficiencyrand
+            # Determine proficiency level and add it to the array. 
+            # Subtract the amt from the total number of allowed points for this dwarf
+            proficiency = generateProficiency(points)
+            proficiencies.append(Proficiency(proficiency))
+            points -= proficiency
+            skills.append(generateSkill(skills))
+            
         dwarvesgenerated += 1
         printskills(dwarvesgenerated, skills, proficiencies)
     input('\nPress ENTER to exit')
+    
+#Generates a number within the legal range of proficiencies based on points.
+def generateProficiency(points):
+    proficiency = 0
+    if(points >=5):
+        proficiency = random.randrange(1, 5, 1)
+    elif(points == 1):
+        proficiency = 1
+    else:
+        proficiency = random.randrange(1, points, 1)
+        
+    return proficiency
+    
 
+#Returns a random skill from one of the 4 categories
+def generateSkill(skills):
+    def selectcrucialskill():
+        skillToSelect = random.randrange(1, 23, 1)
+        return CrucialSkill(skillToSelect)
+    def selectlaborskill():
+        skillToSelect = random.randrange(1, 34, 1)
+        return LaborSkill(skillToSelect)
+    def selectcombatskill():
+        skillToSelect = random.randrange(1, 20, 1)
+        return CombatSkill(skillToSelect)
+    def selectotherskill():
+        skillToSelect = random.randrange(1, 44, 1)
+        return OtherSkill(skillToSelect)
 
+    # Figure out which category we will select from.
+    categoryrand = random.random()
+    newskillfound = False
+    while(newskillfound == False):
+        if categoryrand <= 0.25:
+            skillFound = selectcrucialskill()
+        elif categoryrand <=.50:
+            skillFound = selectlaborskill()
+        elif categoryrand <=.75:
+            skillFound = selectcombatskill()
+        else:
+            skillFound = selectotherskill()
+
+        if not(skillFound in skills):
+            newskillfound = True
+    return skillFound
+            
+            
 def printskills(numberOfDwarf, skills, proficiencies):
     print("Dwarf #{0}".format(numberOfDwarf))
     index = 0
     for skill in skills:
         print(proficiencies[index].name + " " + skill.name)
         index += 1
-
-def selectcrucialskill():
-    skillToSelect = random.randrange(1, 23, 1)
-    return CrucialSkill(skillToSelect)
-def selectlaborskill():
-    skillToSelect = random.randrange(1, 34, 1)
-    return LaborSkill(skillToSelect)
-def selectcombatskill():
-    skillToSelect = random.randrange(1, 20, 1)
-    return CombatSkill(skillToSelect)
-def selectotherskill():
-    skillToSelect = random.randrange(1, 44, 1)
-    return OtherSkill(skillToSelect)
 
 class OtherSkill(Enum):
     SWIMMER = 1
@@ -203,7 +211,7 @@ class Proficiency(Enum):
 
 
 def main():
-    generateskilllist()
+    generateDwarves()
 
 if __name__ == "__main__":
     main()
