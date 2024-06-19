@@ -27,11 +27,20 @@ def generateDwarves():
 def generateProficiency(points):
     proficiency = 0
     if(points >=5):
-        proficiency = random.randrange(1, 6, 1)
+        proficiency = random.randrange(2, 6, 1)
     elif(points == 1):
         proficiency = 1
     else:
-        proficiency = random.randrange(1, points+1, 1)
+        proficiency = random.randrange(2, points+1, 1)
+    
+    #If the selected proficiency would end us with a single point left, round up
+    #If its already at 5, round down to allow for a 2 selection on the next iteration
+    
+    if(points - proficiency == 1):
+        if(proficiency == 5):
+            proficiency -= 1
+        else:
+            proficiency += 1
         
     return proficiency
     
